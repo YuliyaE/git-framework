@@ -1,0 +1,11 @@
+# Java files
+*.class
+
+*.db
+*.log
+/bin
+/target
+
+# Idea
+.idea/
+*.iml
