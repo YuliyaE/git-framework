@@ -3,13 +3,14 @@
     <Appenders>
         <Console name="Console">
             <PatternLayout>
-                <Pattern>pattern="%d{dd/MMM/yyyy HH:mm:ss,SSS}- %c{1}: %m%n"</Pattern>
+                <Pattern>%d %p %c{2} [%t] %l %m%n</Pattern>
             </PatternLayout>
         </Console>
-        <RollingFile name="RollingFile" fileName="target/logs/github-automation.log"
-                     filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
-            <PatternLayout pattern="${pattern}"/>
-        </RollingFile>
+        <File name="File" fileName="target/logs/github-automation.log">
+            <PatternLayout>
+                <Pattern>%d %p %c{2} [%t] %m%n</Pattern>
+            </PatternLayout>
+        </File>
     </Appenders>
     <Loggers>
         <Root level="trace">

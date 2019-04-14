@@ -1,21 +1,22 @@
 package by.yuliya.calculator.page;
 
 import org.apache.logging.log4j.Level;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class EmailPage extends AbstractPage {
 
-    // private final String PAGE_URL = "http://www.yopmail.com/ru/email-generator.php";
     private final String PAGE_URL = "https://10minutemail.com";
-    // private By mailAddress = By.id("login");
-    //  private By mail = By.xpath("//input[@value='Проверить почту']");
-    private By mailAddress = By.id("mailAddress");
-    private By mail = By.xpath("//span[@class='inc-mail-address']");
+    private String currentURLOfEmail;
+
+    @FindBy(id = "mailAddress")
+    private WebElement mailAddress;
+
+    @FindBy(id = "ui-id-1")
+    private WebElement mail;
 
     public EmailPage(WebDriver driver) {
         super(driver);
@@ -23,13 +24,28 @@ public class EmailPage extends AbstractPage {
     }
 
     public String getRandomEmail() {
-        WebElement element = driver.findElement(mailAddress);
+        WebElement element = mailAddress;
+        setCurrentURLOfEmail();
         return element.getAttribute("value");
     }
 
-    public EmailPage readEmail() {
-        new WebDriverWait(driver, 600) .until(ExpectedConditions.presenceOfAllElementsLocatedBy(mail));
-        driver.findElement(mail).click();
+    public String getEstimatedCost() {
+        new WebDriverWait(driver, 90).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//span[@class='inc-mail-address']")));
+        mail.click();
+        WebElement element = driver.findElement(By.xpath("//*[contains(text(),'USD')]"));
+        return element.getText();
+    }
+
+    public String getCurrentURLOfEmail() {
+        return currentURLOfEmail;
+    }
+
+    public void setCurrentURLOfEmail() {
+        this.currentURLOfEmail = driver.getCurrentUrl();
+    }
+
+    public EmailPage openCurrentEmail() {
+        driver.navigate().to(getCurrentURLOfEmail());
         return this;
     }
 

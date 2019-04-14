@@ -3,7 +3,7 @@
 <suite name="Smoke" verbose="1">
     <test name="FrameData">
         <classes>
-            <class name="by.yuliya.calculator.test.FrameDataTest" />
+            <class name="by.yuliya.calculator.test.EstimatedCostTest" />
         </classes>
     </test>
 </suite>

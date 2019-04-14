@@ -15,13 +15,10 @@ public class CommonConditions {
     @BeforeTest
     public void setUp(){
         driver = DriverSingleton.getDriver();
-        /*driver = new OperaDriver();
-        driver.manage().window().maximize();*/
     }
 
     @AfterTest
     public void tearDown(){
         DriverSingleton.closeDriver();
-       // driver.quit();
     }
 }
