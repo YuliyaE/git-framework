@@ -33,7 +33,8 @@ public class EmailPage extends AbstractPage {
         new WebDriverWait(driver, 90).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//span[@class='inc-mail-address']")));
         mail.click();
         WebElement element = driver.findElement(By.xpath("//*[contains(text(),'USD')]"));
-        return element.getText();
+        String message = element.getText();
+        return message.replaceAll("Estimated Monthly", "Total Estimated") + " per 1 month";
     }
 
     public String getCurrentURLOfEmail() {

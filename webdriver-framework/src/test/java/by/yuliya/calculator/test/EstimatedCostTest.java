@@ -7,7 +7,6 @@ import by.yuliya.calculator.service.CalculatorDataCreator;
 
 import org.testng.annotations.Test;
 
-
 import static org.testng.Assert.assertEquals;
 
 public class EstimatedCostTest extends CommonConditions {
@@ -27,7 +26,6 @@ public class EstimatedCostTest extends CommonConditions {
         calculatorPage.returnToCurrentCalculator()
                 .confirmRentCostEstimation(email);
         assertEquals(emailPage.openCurrentEmail().getEstimatedCost(), cost);
-
     }
 
 }

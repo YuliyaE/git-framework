@@ -1,5 +1,6 @@
 package by.yuliya.calculator.driver;
 
+import io.github.bonigarcia.wdm.ChromeDriverManager;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -20,7 +21,7 @@ public class DriverSingleton {
                     break;
                 }
                 default: {
-                   // WebDriverManager.chromedriver().setup();
+                    WebDriverManager.chromedriver().setup();
                     driver = new ChromeDriver();
                     break;
                 }
