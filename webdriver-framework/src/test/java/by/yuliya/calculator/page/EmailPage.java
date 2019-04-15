@@ -18,6 +18,9 @@ public class EmailPage extends AbstractPage {
     @FindBy(id = "ui-id-1")
     private WebElement mail;
 
+    @FindBy(xpath = "//*[contains(text(),'USD')]")
+    private WebElement message;
+
     public EmailPage(WebDriver driver) {
         super(driver);
         PageFactory.initElements(this.driver, this);
@@ -30,11 +33,10 @@ public class EmailPage extends AbstractPage {
     }
 
     public String getEstimatedCost() {
-        new WebDriverWait(driver, 90).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//span[@class='inc-mail-address']")));
+        new WebDriverWait(driver, 90).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.id("ui-id-1")));
         mail.click();
-        WebElement element = driver.findElement(By.xpath("//*[contains(text(),'USD')]"));
-        String message = element.getText();
-        return message.replaceAll("Estimated Monthly", "Total Estimated") + " per 1 month";
+        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[contains(text(),'USD')]")));
+        return message.getText();
     }
 
     public String getCurrentURLOfEmail() {

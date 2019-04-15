@@ -358,7 +358,8 @@ public class CalculatorPage extends AbstractPage {
     }
 
     public String getRentCost() {
-        return rentCost.getText();
+        String cost = rentCost.getText();
+        return cost.replace("Total Estimated", "Estimated Monthly").replace(" per 1 month", "");
     }
 
     public String getCurrentURLOfCalculator() {
@@ -389,7 +390,7 @@ public class CalculatorPage extends AbstractPage {
 
     @Override
     public CalculatorPage openPage() {
-        driver.navigate().to(PAGE_URL);
+        new PricingPage(driver).openPage().clickCalculator();
         logger.log(Level.INFO, "Calculator page opened");
         return this;
     }
