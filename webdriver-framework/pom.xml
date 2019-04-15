@@ -5,6 +5,7 @@
     <groupId>by.yuliya.calculator</groupId>
     <artifactId>practice</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <url>https://github.com/YuliyaE/git-framework.git</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -74,6 +75,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>

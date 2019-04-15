@@ -13,7 +13,6 @@ public class EstimatedCostTest extends CommonConditions {
 
     @Test
     public void testTotalEstimatedCostFromEmail() {
-
         CalculatorData data = CalculatorDataCreator.dataForCalculatorFields();
         CalculatorPage calculatorPage = new CalculatorPage(driver);
         String cost = calculatorPage
@@ -23,7 +22,8 @@ public class EstimatedCostTest extends CommonConditions {
         String email = emailPage
                 .openPage()
                 .getRandomEmail();
-        calculatorPage.returnToCurrentCalculator()
+        calculatorPage
+                .returnToCurrentCalculator()
                 .confirmRentCostEstimation(email);
         assertEquals(emailPage.openCurrentEmail().getEstimatedCost(), cost);
     }

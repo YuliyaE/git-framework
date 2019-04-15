@@ -18,7 +18,7 @@ public class EmailPage extends AbstractPage {
     @FindBy(id = "ui-id-1")
     private WebElement mail;
 
-    @FindBy(xpath = "//*[contains(text(),'USD')]")
+    @FindBy(xpath = "//*[contains(text(),'Estimated Monthly Cost')]")
     private WebElement message;
 
     public EmailPage(WebDriver driver) {
@@ -35,7 +35,6 @@ public class EmailPage extends AbstractPage {
     public String getEstimatedCost() {
         new WebDriverWait(driver, 90).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.id("ui-id-1")));
         mail.click();
-        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[contains(text(),'USD')]")));
         return message.getText();
     }
 
