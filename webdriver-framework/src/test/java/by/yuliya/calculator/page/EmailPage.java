@@ -9,16 +9,16 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class EmailPage extends AbstractPage {
 
-    private final String PAGE_URL = "https://10minutemail.com";
+    private final String PAGE_URL = "https://10minutemail.net/?lang=ru";
+
     private String currentURLOfEmail;
 
-    @FindBy(id = "mailAddress")
+    @FindBy(id = "fe_text")
     private WebElement mailAddress;
 
-    @FindBy(id = "ui-id-1")
-    private WebElement mail;
+    private final By mailLocator = By.xpath("//a[text()='Google Cloud Platform Price Estimate']");
 
-    @FindBy(xpath = "//*[contains(text(),'Estimated Monthly Cost')]")
+    @FindBy(xpath = "//*[contains(text(),'USD')]")
     private WebElement message;
 
     public EmailPage(WebDriver driver) {
@@ -33,8 +33,10 @@ public class EmailPage extends AbstractPage {
     }
 
     public String getEstimatedCost() {
-        new WebDriverWait(driver, 90).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.id("ui-id-1")));
+        WebElement  mail = new WebDriverWait(driver, 90)
+                .until(ExpectedConditions.presenceOfElementLocated(mailLocator));
         mail.click();
+        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS).until(ExpectedConditions.elementToBeClickable(By.xpath("//*[contains(text(),'USD')]")));
         return message.getText();
     }
 

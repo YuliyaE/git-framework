@@ -14,6 +14,7 @@ public class CalculatorPage extends AbstractPage {
 
     private final String PAGE_URL = "https://cloud.google.com/products/calculator/";
     private final String FRAME_ID = "idIframe";
+    private static final String REGEX_SPACE = "\\s";
     private String currentURLOfCalculator;
 
     @FindBy(xpath = "//*[contains(text(),'Compute Engine')]")
@@ -52,6 +53,9 @@ public class CalculatorPage extends AbstractPage {
     @FindBy(xpath = "//button[@class='md-raised md-primary cpc-button md-button md-ink-ripple' and text()='Add to Estimate']")
     private WebElement estimate;
 
+    @FindBy(xpath = "//button[@class='md-raised md-primary cpc-button md-button md-ink-ripple hide-sm' and contains(text(), 'Save Estimate')]")
+    private WebElement saveEstimate;
+
     @FindBy(xpath = "//*[contains(text(),'Total Estimated Cost:')]")
     private WebElement rentCost;
 
@@ -71,8 +75,6 @@ public class CalculatorPage extends AbstractPage {
 
     public String estimateRentCost(CalculatorData calculatorData) {
         driver.switchTo().frame(FRAME_ID);
-        WebDriverWait wait = new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS);
-        wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*")));
         clickComputeEngine();
         setNumberOfInstances(calculatorData);
         setOperatingSystem(calculatorData);
@@ -85,18 +87,19 @@ public class CalculatorPage extends AbstractPage {
         setDatacenterLocation(calculatorData);
         setCommitedUsage(calculatorData);
         clickEstimate();
+        saveEstimate();
         setCurrentURLOfCalculator();
         return getRentCost();
     }
 
     public EmailPage confirmRentCostEstimation(String email) {
         driver.switchTo().frame(FRAME_ID);
+        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS).until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@class='md-raised md-primary cpc-button md-button md-ink-ripple' and @id='email_quote']")));
         clickEmailEstimate();
         enterEmail(email);
         clickSendEmail();
         return new EmailPage(driver);
     }
-
 
     private void clickComputeEngine() {
         computeEngine.click();
@@ -155,38 +158,7 @@ public class CalculatorPage extends AbstractPage {
 
     private void setInstanceType(CalculatorData calculatorData) {
         instanceType.click();
-        switch (calculatorData.getInstanceType()) {
-            case "Custom Machine Type":
-                driver.findElement(By.xpath("//md-option[@value='custom']")).click();
-                break;
-            case "f1-micro    (vCPUs: shared, RAM: 0.60 GB)":
-                driver.findElement(By.xpath("//md-option[@value='CP-COMPUTEENGINE-VMIMAGE-F1-MICRO']")).click();
-                break;
-            case "g1-small    (vCPUs: shared, RAM: 1.70 GB)":
-                driver.findElement(By.xpath("//md-option[@value='CP-COMPUTEENGINE-VMIMAGE-G1-SMALL']")).click();
-                break;
-            case "n1-standard-1    (vCPUs: 1, RAM: 3.75 GB)":
-                driver.findElement(By.xpath("//md-option[@value='CP-COMPUTEENGINE-VMIMAGE-N1-STANDARD-1']")).click();
-                break;
-            case "n1-standard-2    (vCPUs: 2, RAM: 7.5 GB)":
-                driver.findElement(By.xpath("//md-option[@value='CP-COMPUTEENGINE-VMIMAGE-N1-STANDARD-2']")).click();
-                break;
-            case "n1-standard-4    (vCPUs: 4, RAM: 15 GB)":
-                driver.findElement(By.xpath("//md-option[@value='CP-COMPUTEENGINE-VMIMAGE-N1-STANDARD-4']")).click();
-                break;
-            case "n1-standard-8    (vCPUs: 8, RAM: 30 GB)":
-                driver.findElement(By.xpath("//md-option[@value='CP-COMPUTEENGINE-VMIMAGE-N1-STANDARD-8']")).click();
-                break;
-            case "n1-standard-16    (vCPUs: 16, RAM: 60 GB)":
-                driver.findElement(By.xpath("//md-option[@value='CP-COMPUTEENGINE-VMIMAGE-N1-STANDARD-16']")).click();
-                break;
-            case "n1-standard-64    (vCPUs: 64, RAM: 240 GB)":
-                driver.findElement(By.xpath("//md-option[@value='CP-COMPUTEENGINE-VMIMAGE-N1-STANDARD-64']")).click();
-                break;
-            case "n1-standard-96    (vCPUs: 96, RAM: 360 GB)":
-                driver.findElement(By.xpath("//md-option[@value='CP-COMPUTEENGINE-VMIMAGE-N1-STANDARD-96']")).click();
-                break;
-        }
+        driver.findElement(By.xpath("//md-option[@value='CP-COMPUTEENGINE-VMIMAGE-" + (calculatorData.getInstanceType().split(REGEX_SPACE)[0]).toUpperCase() + "']")).click();
     }
 
     private void setAddGPUs(CalculatorData calculatorData) {
@@ -197,143 +169,81 @@ public class CalculatorPage extends AbstractPage {
 
     private void setNumberOfGPUs(CalculatorData calculatorData) {
         numberOfGPUs.click();
-        switch (calculatorData.getNumberOfGPUs()) {
-            case 0:
-                driver.findElement(By.xpath("//div[@class='md-text ng-binding' and text()='0']")).click();
-                break;
-            case 1:
-                driver.findElement(By.xpath("//div[@class='md-text ng-binding' and text()='1']")).click();
-                break;
-            case 2:
-                driver.findElement(By.xpath("//div[@class='md-text ng-binding' and text()='2']")).click();
-                break;
-            case 4:
-                driver.findElement(By.xpath("//div[@class='md-text ng-binding' and text()='4']")).click();
-                break;
-            case 8:
-                driver.findElement(By.xpath("//div[@class='md-text ng-binding' and text()='8']")).click();
-                break;
-        }
-
+        driver.findElement(By.xpath("//div[@class='md-text ng-binding' and text()='" + calculatorData.getNumberOfGPUs() + "']")).click();
     }
 
     private void setGPUType(CalculatorData calculatorData) {
         GPUType.click();
-        switch (calculatorData.getGPUType()) {
-            case "NVIDIA Tesla K80":
-                driver.findElement(By.xpath("//div[@class='md-text ng-binding' and text()='NVIDIA Tesla K80']")).click();
-                break;
-            case "NVIDIA Tesla P100":
-                driver.findElement(By.xpath("//div[@class='md-text ng-binding' and text()='NVIDIA Tesla P100']")).click();
-                break;
-            case "NVIDIA Tesla P4":
-                driver.findElement(By.xpath("//div[@class='md-text ng-binding' and text()='NVIDIA Tesla P4']")).click();
-                break;
-            case "NVIDIA Tesla V100":
-                driver.findElement(By.xpath("//div[@class='md-text ng-binding' and text()='NVIDIA Tesla V100']")).click();
-                break;
-            case "NVIDIA Tesla T4":
-                driver.findElement(By.xpath("//div[@class='md-text ng-binding' and text()='NVIDIA Tesla T4']")).click();
-                break;
-        }
-
+        driver.findElement(By.xpath("//div[@class='md-text ng-binding' and text()='" + calculatorData.getGPUType() + "']")).click();
     }
 
     private void setLocalSSD(CalculatorData calculatorData) {
         localSSD.click();
-        switch (calculatorData.getLocalSSD()) {
-            case "0":
-                driver.findElement(By.xpath("//div[@class='md-text ng-binding' and text()='0']")).click();
-                break;
-            case "1x375 GB":
-                driver.findElement(By.xpath("//div[@class='md-text ng-binding' and text()='1x375 GB']")).click();
-                break;
-            case "2x375 GB":
-                driver.findElement(By.xpath("//div[@class='md-text ng-binding' and text()='2x375 GB']")).click();
-                break;
-            case "3x375 GB":
-                driver.findElement(By.xpath("//div[@class='md-text ng-binding' and text()='3x375 GB']")).click();
-                break;
-            case "4x375 GB":
-                driver.findElement(By.xpath("//div[@class='md-text ng-binding' and text()='4x375 GB']")).click();
-                break;
-            case "5x375 GB":
-                driver.findElement(By.xpath("//div[@class='md-text ng-binding' and text()='5x375 GB']")).click();
-                break;
-            case "6x375 GB":
-                driver.findElement(By.xpath("//div[@class='md-text ng-binding' and text()='6x375 GB']")).click();
-                break;
-            case "7x375 GB":
-                driver.findElement(By.xpath("//div[@class='md-text ng-binding' and text()='7x375 GB']")).click();
-                break;
-            case "8x375 GB":
-                driver.findElement(By.xpath("//div[@class='md-text ng-binding' and text()='8x375 GB']")).click();
-                break;
-        }
+        driver.findElement(By.xpath("//div[@class='md-text ng-binding' and text()='" + calculatorData.getLocalSSD() + "']")).click();
     }
 
     private void setDatacenterLocation(CalculatorData calculatorData) {
         datacenterLocation.click();
         switch (calculatorData.getDatacenterLocation()) {
             case "Iowa (us-central1)":
-                driver.findElement(By.xpath("//md-option[@id='select_option_192' and @value='us-central1']")).click();
+                driver.findElement(By.id("select_option_192")).click();
                 break;
             case "South Carolina (us-east1)":
-                driver.findElement(By.xpath("//md-option[@id='select_option_193' and @value='us-east1']")).click();
+                driver.findElement(By.id("select_option_193")).click();
                 break;
             case "Northern Virginia (us-east4)":
-                driver.findElement(By.xpath("//md-option[@id='select_option_194' and @value='us-east4']")).click();
+                driver.findElement(By.id("select_option_194")).click();
                 break;
             case "Oregon (us-west1)":
-                driver.findElement(By.xpath("//md-option[@id='select_option_195' and @value='us-west1']")).click();
+                driver.findElement(By.id("select_option_195")).click();
                 break;
             case "Los Angeles (us-west2)":
-                driver.findElement(By.xpath("//md-option[@id='select_option_196' and @value='us-west2']")).click();
+                driver.findElement(By.id("select_option_196")).click();
                 break;
             case "Belgium (europe-west1)":
-                driver.findElement(By.xpath("//md-option[@id='select_option_197' and @value='europe-west1']")).click();
+                driver.findElement(By.id("select_option_197")).click();
                 break;
             case "London (europe-west2)":
-                driver.findElement(By.xpath("//md-option[@id='select_option_198' and @value='europe-west2']")).click();
+                driver.findElement(By.id("select_option_198")).click();
                 break;
             case "Frankfurt (europe-west3)":
-                driver.findElement(By.xpath("//md-option[@id='select_option_199' and @value='europe-west3']")).click();
+                driver.findElement(By.id("select_option_199")).click();
                 break;
             case "Taiwan (asia-east1)":
-                driver.findElement(By.xpath("//md-option[@id='select_option_200' and @value='asia-east1']")).click();
+                driver.findElement(By.id("select_option_200")).click();
                 break;
             case "Hong Kong (asia-east2)":
-                driver.findElement(By.xpath("//md-option[@id='select_option_201' and @value='asia-east2']")).click();
+                driver.findElement(By.id("select_option_201")).click();
                 break;
             case "Tokyo (asia-northeast1)":
-                driver.findElement(By.xpath("//md-option[@id='select_option_202' and @value='asia-northeast1']")).click();
+                driver.findElement(By.id("select_option_202")).click();
                 break;
             case "Osaka (asia-northeast2)":
-                driver.findElement(By.xpath("//md-option[@id='select_option_203' and @value='asia-northeast2']")).click();
+                driver.findElement(By.id("select_option_203")).click();
                 break;
             case "Singapore (asia-southeast1)":
-                driver.findElement(By.xpath("//md-option[@id='select_option_204' and @value='asia-southeast1']")).click();
+                driver.findElement(By.id("select_option_204")).click();
                 break;
             case "Mumbai (asia-south1)":
-                driver.findElement(By.xpath("//md-option[@id='select_option_205' and @value='asia-south1']")).click();
+                driver.findElement(By.id("select_option_205")).click();
                 break;
             case "Sydney (australia-southeast1)":
-                driver.findElement(By.xpath("//md-option[@id='select_option_206' and @value='australia-southeast1']")).click();
+                driver.findElement(By.id("select_option_206")).click();
                 break;
             case "Sao Paulo (southamerica-east1)":
-                driver.findElement(By.xpath("//md-option[@id='select_option_207' and @value='southamerica-east1']")).click();
+                driver.findElement(By.id("select_option_207")).click();
                 break;
             case "Netherlands (europe-west4)":
-                driver.findElement(By.xpath("//md-option[@id='select_option_208' and @value='europe-west4']")).click();
+                driver.findElement(By.id("select_option_208")).click();
                 break;
             case "Zurich (europe-west6)":
-                driver.findElement(By.xpath("//md-option[@id='select_option_209' and @value='europe-west6']")).click();
+                driver.findElement(By.id("select_option_209")).click();
                 break;
             case "Finland (europe-north1)":
-                driver.findElement(By.xpath("//md-option[@id='select_option_210' and @value='europe-north1']")).click();
+                driver.findElement(By.id("select_option_210")).click();
                 break;
             case "Montréal, Canada (northamerica-northeast1)":
-                driver.findElement(By.xpath("//md-option[@id='select_option_211' and @value='northamerica-northeast1']")).click();
+                driver.findElement(By.id("select_option_211")).click();
                 break;
         }
     }
@@ -342,19 +252,23 @@ public class CalculatorPage extends AbstractPage {
         commitedUsage.click();
         switch (calculatorData.getCommitedUsage()) {
             case "None":
-                driver.findElement(By.xpath("//md-option[@id='select_option_102' and @value='0']")).click();
+                driver.findElement(By.id("select_option_102")).click();
                 break;
             case "1 Year":
-                driver.findElement(By.xpath("//md-option[@id='select_option_103' and @value='1']")).click();
+                driver.findElement(By.id("select_option_103")).click();
                 break;
             case "3 Years":
-                driver.findElement(By.xpath("//md-option[@id='select_option_104' and @value='3']")).click();
+                driver.findElement(By.id("select_option_104")).click();
                 break;
         }
     }
 
     private void clickEstimate() {
         estimate.click();
+    }
+
+    private void saveEstimate() {
+        saveEstimate.click();
     }
 
     public String getRentCost() {
@@ -370,7 +284,7 @@ public class CalculatorPage extends AbstractPage {
         this.currentURLOfCalculator = driver.getCurrentUrl();
     }
 
-    public CalculatorPage returnToCurrentCalculator(){
+    public CalculatorPage returnToCurrentCalculator() {
         driver.navigate().to(getCurrentURLOfCalculator());
         return this;
     }
@@ -383,7 +297,6 @@ public class CalculatorPage extends AbstractPage {
         emailInput.sendKeys(email);
     }
 
-
     private void clickSendEmail() {
         sendEmail.click();
     }
@@ -391,6 +304,7 @@ public class CalculatorPage extends AbstractPage {
     @Override
     public CalculatorPage openPage() {
         new PricingPage(driver).openPage().clickCalculator();
+        driver.navigate().to(PAGE_URL);
         logger.log(Level.INFO, "Calculator page opened");
         return this;
     }
