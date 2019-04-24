@@ -3,7 +3,7 @@
 <suite name="All tests" verbose="1">
     <test name="All tests">
         <packages>
-            <package name="by.yuliya.calculator.test.EstimatedCostTest"/>
+            <package name="by.yuliya.calculator.test"/>
         </packages>
     </test>
 </suite>
