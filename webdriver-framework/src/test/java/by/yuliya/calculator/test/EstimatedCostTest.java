@@ -11,7 +11,7 @@ import static org.testng.Assert.assertEquals;
 
 public class EstimatedCostTest extends CommonConditions {
 
-    @Test
+    /*@Test
     public void testTotalEstimatedCostFromEmail() {
         CalculatorData data = CalculatorDataCreator.dataForCalculatorFields();
         CalculatorPage calculatorPage = new CalculatorPage(driver);
@@ -26,6 +26,17 @@ public class EstimatedCostTest extends CommonConditions {
                 .returnToCurrentCalculator()
                 .confirmRentCostEstimation(email);
         assertEquals(emailPage.openCurrentEmail().getEstimatedCost(), cost);
+    }*/
+
+    @Test
+    public void testTotalEstimatedCostFromEmail() {
+        CalculatorData data = CalculatorDataCreator.dataForCalculatorFields();
+        CalculatorPage calculatorPage = new CalculatorPage(driver);
+        String cost = calculatorPage
+                .openPage()
+                .estimateRentCost(data);
+        System.out.println(cost + "  first");
+        assertEquals("Estimated Monthly Cost: USD 388.36", cost);
     }
 
 }

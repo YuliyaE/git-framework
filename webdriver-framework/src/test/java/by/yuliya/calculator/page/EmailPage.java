@@ -2,6 +2,7 @@ package by.yuliya.calculator.page;
 
 import org.apache.logging.log4j.Level;
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -33,7 +34,7 @@ public class EmailPage extends AbstractPage {
     }
 
     public String getEstimatedCost() {
-        WebElement  mail = new WebDriverWait(driver, 90)
+        WebElement mail = new WebDriverWait(driver, 90)
                 .until(ExpectedConditions.presenceOfElementLocated(mailLocator));
         mail.click();
         new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS).until(ExpectedConditions.elementToBeClickable(By.xpath("//*[contains(text(),'USD')]")));
@@ -55,6 +56,7 @@ public class EmailPage extends AbstractPage {
 
     @Override
     public EmailPage openPage() {
+        new Actions(driver).sendKeys(Keys.CONTROL + "T").build().perform();
         driver.navigate().to(PAGE_URL);
         logger.log(Level.INFO, "Email page opened");
         return this;

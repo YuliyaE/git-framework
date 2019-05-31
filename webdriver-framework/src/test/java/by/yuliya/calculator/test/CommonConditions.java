@@ -13,12 +13,14 @@ public class CommonConditions {
     protected WebDriver driver;
 
     @BeforeTest
-    public void setUp(){
+    public void setUp() {
+        System.setProperty("environment", "dev");
+        System.setProperty("browser", "opera");
         driver = DriverSingleton.getDriver();
     }
 
     @AfterTest
-    public void tearDown(){
+    public void tearDown() throws InterruptedException {
         DriverSingleton.closeDriver();
     }
 }

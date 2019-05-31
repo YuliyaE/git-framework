@@ -1,38 +1,85 @@
 package by.yuliya.calculator.driver;
 
-import io.github.bonigarcia.wdm.ChromeDriverManager;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.opera.OperaDriver;
+
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.opera.OperaOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class DriverSingleton {
 
     private static WebDriver driver;
 
-    private DriverSingleton(){}
+    private DriverSingleton() {
+    }
 
-    public static WebDriver getDriver(){
-        if (null == driver){
-            switch (System.getProperty("browser")){
+    protected static ThreadLocal<RemoteWebDriver> threadDriver;
+
+    @BeforeTest
+    public static WebDriver getDriver() {
+
+        if (null == threadDriver) {
+            switch (System.getProperty("browser")) {
                 case "opera": {
                     WebDriverManager.operadriver().setup();
-                    driver = new OperaDriver();
+                    OperaOptions options = new OperaOptions();
+                    options.setBinary("C:\\Users\\Yuliya_Eibatava\\AppData\\Local\\Programs\\Opera\\60.0.3255.109\\opera.exe");
+                    threadDriver = new ThreadLocal<RemoteWebDriver>();
+                    try {
+                        //driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), options);
+                        threadDriver.set(new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), options));
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                }
+                case "edge": {
+                    EdgeOptions options = new EdgeOptions();
+                    WebDriverManager.edgedriver().setup();
+                    threadDriver = new ThreadLocal<RemoteWebDriver>();
+                    try {
+                        //driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), options);
+                        threadDriver.set(new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), options));
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 }
                 default: {
                     WebDriverManager.chromedriver().setup();
-                    driver = new ChromeDriver();
+                   /* DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+                    capabilities.setBrowserName("chrome");*/
+                    ChromeOptions options = new ChromeOptions();
+                    threadDriver = new ThreadLocal<RemoteWebDriver>();
+                    try {
+                        // driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"),options);
+                        threadDriver.set(new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), options));
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
                     break;
+
+
                 }
+
             }
-            driver.manage().window().maximize();
+            threadDriver.get().manage().window().maximize();
         }
-        return driver;
+        return threadDriver.get();
     }
 
-    public static void closeDriver(){
-        driver.quit();
-        driver = null;
+    @AfterTest
+    public static void closeDriver() throws InterruptedException {
+        //  Thread.sleep(3000);
+        //driver.quit();
+        //  driver = null;
+        threadDriver.set(null);
     }
 }
