@@ -1,19 +1,21 @@
-<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-
-<suite name="All tests" verbose="1" parallel="classes" thread-count="2">
-  <!--  <test name="All tests">
-        <packages>
-            <package name="by.yuliya.calculator.test"/>
-        </packages>
-    </test> -->
-
-    <test name="FrameData">
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="Parallel test suite" parallel="tests" thread-count="3">
+    <test name="Chrome">
+        <parameter name="browser" value="opera"></parameter>
         <classes>
             <class name="by.yuliya.calculator.test.EstimatedCostTest" />
-            <class name="by.yuliya.calculator.test.CostTest" />
         </classes>
     </test>
-
-
-
+    <test name="Opera">
+        <parameter name="browser" value="opera"></parameter>
+    <classes>
+        <class name="by.yuliya.calculator.test.EstimatedCostTest" />
+    </classes>
+</test>
+    <test name="Edge">
+        <parameter name="browser" value="edge"></parameter>
+        <classes>
+            <class name="by.yuliya.calculator.test.EstimatedCostTest" />
+        </classes>
+    </test>
 </suite>

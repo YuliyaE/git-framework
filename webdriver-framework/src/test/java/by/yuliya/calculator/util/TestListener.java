@@ -1,5 +1,6 @@
 package by.yuliya.calculator.util;
 
+import by.yuliya.calculator.driver.DriverSingleton;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Level;
 import org.openqa.selenium.OutputType;
@@ -10,7 +11,6 @@ import org.testng.ITestListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.ITestResult;
-import by.yuliya.calculator.driver.DriverSingleton;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +33,7 @@ public class TestListener implements ITestListener {
 
     @Override
     public void onTestFailure(ITestResult iTestResult) {
-       // saveScreenshot();
+        saveScreenshot();
     }
 
     @Override
@@ -57,7 +57,7 @@ public class TestListener implements ITestListener {
     }
 
 
-    /*private void saveScreenshot() {
+ private void saveScreenshot() {
         File screenCapture = ((TakesScreenshot) DriverSingleton.getDriver()).getScreenshotAs(OutputType.FILE);
         try {
             FileUtils.copyFile(screenCapture, new File(".//target/screenshots/"
@@ -67,7 +67,7 @@ public class TestListener implements ITestListener {
             logger.log(Level.ERROR, "Failed to save screenshot: " + e.getLocalizedMessage());
         }
 
-    }*/
+    }
 
     private String getCurrentTimeAsString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd_HH-mm-ss");

@@ -3,9 +3,7 @@ package by.yuliya.calculator.test;
 import by.yuliya.calculator.driver.DriverSingleton;
 import by.yuliya.calculator.util.TestListener;
 import org.openqa.selenium.WebDriver;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Listeners;
+import org.testng.annotations.*;
 
 @Listeners(TestListener.class)
 public class CommonConditions {
@@ -16,11 +14,11 @@ public class CommonConditions {
     public void setUp() {
         System.setProperty("environment", "dev");
         System.setProperty("browser", "opera");
-        driver = DriverSingleton.getDriver();
+        driver = (new DriverSingleton().getDriver());
     }
 
     @AfterTest
-    public void tearDown() throws InterruptedException {
-        DriverSingleton.closeDriver();
+    public void tearDown(){
+       driver.close();
     }
 }

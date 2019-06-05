@@ -17,7 +17,7 @@ public class CostTest extends CommonConditions {
                 .openPage()
                 .estimateRentCost(data);
         System.out.println(cost + "  third");
-        assertEquals("Estimated Monthly Cost: USD 388.36", cost);
+        assertEquals("Estimated Monthly Cost: USD 776.72", cost);
     }
 
 
