@@ -1,6 +1,6 @@
 package by.yuliya.calculator.page;
 
-import org.apache.logging.log4j.Level;
+
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
@@ -58,7 +58,8 @@ public class EmailPage extends AbstractPage {
     public EmailPage openPage() {
         new Actions(driver).sendKeys(Keys.CONTROL + "T").build().perform();
         driver.navigate().to(PAGE_URL);
-        logger.log(Level.INFO, "Email page opened");
+      logger.info("Email page opened");
+
         return this;
     }
 }

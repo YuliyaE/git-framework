@@ -1,6 +1,5 @@
 package by.yuliya.calculator.page;
 
-import org.apache.logging.log4j.Level;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -31,7 +30,7 @@ public class PricingPage extends AbstractPage {
     @Override
     public PricingPage openPage() {
         new ProductAndServicesPage(driver).openPage().clickSeePricing();
-        logger.log(Level.INFO, "Pricing page opened");
+        logger.info("Pricing page opened");
         return this;
     }
 

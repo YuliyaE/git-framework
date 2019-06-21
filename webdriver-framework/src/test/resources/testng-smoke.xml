@@ -4,8 +4,8 @@
 
     <test name="FrameData">
         <classes>
+            <class name="by.yuliya.calculator.test.EstimatedCostByEmailTest" />
             <class name="by.yuliya.calculator.test.EstimatedCostTest" />
-            <class name="by.yuliya.calculator.test.CostTest" />
         </classes>
     </test>
 

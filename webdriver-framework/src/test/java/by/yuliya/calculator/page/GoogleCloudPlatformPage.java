@@ -1,6 +1,5 @@
 package by.yuliya.calculator.page;
 
-import org.apache.logging.log4j.Level;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -31,7 +30,7 @@ public class GoogleCloudPlatformPage extends AbstractPage{
     @Override
     public GoogleCloudPlatformPage openPage() {
         driver.get(PAGE_URL);
-        logger.log(Level.INFO, "Google cloud platform page opened");
+        //logger.log(Level.INFO, "Google cloud platform page opened");
         return this;
     }
 
